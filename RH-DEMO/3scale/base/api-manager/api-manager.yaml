@@ -1,0 +1,45 @@
+apiVersion: apps.3scale.net/v1alpha1
+kind: APIManager
+metadata:
+  name: orlen-apimanager
+  annotations:
+    argocd.argoproj.io/sync-wave: "11"
+spec:
+  # Replace with your actual wildcard domain
+  wildcardDomain: apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+
+  system:
+    appSpec:
+        replicas: 1
+    sidekiqSpec:
+        replicas: 1
+    zync:
+      appSpec:
+        replicas: 1
+      queSpec:
+        replicas: 1
+    backend:
+      cronSpec:
+        replicas: 1
+      listenerSpec:
+        replicas: 1
+      workerSpec:
+        replicas: 1
+    apicast:
+      productionSpec:
+        replicas: 1
+      stagingSpec:
+        replicas: 1
+  
+#    fileStorage:
+#      persistentVolumeClaim:
+#        # Replace 'nfs-storage' with the name of your NFS StorageClass
+#        storageClassName: nfs
+
+  externalComponents:
+    backend:
+      redis: true  # Tells the operator you are providing the Redis
+    system:
+      database: true
+      redis: true
+      
