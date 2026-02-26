@@ -6,7 +6,7 @@ metadata:
     argocd.argoproj.io/sync-wave: "11"
 spec:
   # Replace with your actual wildcard domain
-  wildcardDomain: apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+  wildcardDomain: xxx
 
   system:
     appSpec:
@@ -31,10 +31,9 @@ spec:
       stagingSpec:
         replicas: 1
   
-#    fileStorage:
-#      persistentVolumeClaim:
-#        # Replace 'nfs-storage' with the name of your NFS StorageClass
-#        storageClassName: nfs
+    fileStorage:
+      persistentVolumeClaim:
+        storageClassName: nfs
 
   externalComponents:
     backend:
