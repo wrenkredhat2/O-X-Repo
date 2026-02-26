@@ -83,7 +83,7 @@ kind: Deployment
 metadata:
   name: postgres
   annotations:
-    argocd.argoproj.io/sync-wave: "01"
+    argocd.argoproj.io/sync-wave: "00"
 spec:
   replicas: 1
   selector:
