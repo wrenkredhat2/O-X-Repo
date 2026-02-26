@@ -43,6 +43,14 @@ patches:
         path: /stringData/URL
         value:   redis://valkey.3scale.svc.cluster.local:6379/2
 
+  - target:
+      kind: Secret
+      name: system-database
+    patch: |-
+      - op: replace
+        path: /stringData/URL
+        value:   postgresql://3scale:supersecret@postgres.3scale.svc.cluster.local:5432/3scale-db
+
 # Festgelegtes Image für Stabilität
 #images:
 #  - name: my-app-image
