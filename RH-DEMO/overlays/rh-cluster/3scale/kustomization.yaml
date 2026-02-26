@@ -22,7 +22,7 @@ patches:
         value: apps.cluster-492gk.492gk.sandbox2076.opentlc.com
       - op: replace
         path: /spec/system/fileStorage/persistentVolumeClaim/storageClassName
-        value: nfs
+        value: managed-nfs-storage
 
   - target:
       kind: Secret
