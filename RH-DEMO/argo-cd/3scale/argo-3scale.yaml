@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: 3scale
-  namespace: argocd # Standardmäßig wird die App im argocd-Namespace verwaltet
+  namespace: openshift-gitops # Standardmäßig wird die App im argocd-Namespace verwaltet
 spec:
   project: default
   
@@ -22,5 +22,3 @@ spec:
     automated:
       prune: true      # Löscht Ressourcen im Cluster, die nicht mehr im Git sind
       selfHeal: true   # Korrigiert manuelle Änderungen am Cluster automatisch zurück
-    syncOptions:
-      - CreateNamespace=true # Erstellt den Ziel-Namespace, falls er nicht existiert

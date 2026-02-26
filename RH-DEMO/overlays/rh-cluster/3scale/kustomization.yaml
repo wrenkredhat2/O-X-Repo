@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: 3scale
 
 resources:
-  - ../../3scale/base
+  - ../../../3scale/base
 
 #namePrefix: prod-
 #commonLabels:
