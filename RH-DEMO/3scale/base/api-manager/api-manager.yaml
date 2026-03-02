@@ -13,19 +13,19 @@ spec:
         replicas: 1
     sidekiqSpec:
         replicas: 1
-    zync:
+    zyncSpec:
       appSpec:
         replicas: 1
       queSpec:
         replicas: 1
-    backend:
+    backendSpec:
       cronSpec:
         replicas: 1
       listenerSpec:
         replicas: 1
       workerSpec:
         replicas: 1
-    apicast:
+    apicastSpec:
       productionSpec:
         replicas: 1
       stagingSpec:
