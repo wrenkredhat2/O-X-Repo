@@ -8,7 +8,7 @@ metadata:
 spec:
   replicas: 3
   roles:
-    - contoller
+    - controller
   storage:
     type: jbod
     volumes:
