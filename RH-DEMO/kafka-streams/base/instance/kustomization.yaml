@@ -3,7 +3,9 @@ kind: Kustomization
 
 # 1. Ressourcen, die verwaltet werden sollen
 resources:
+  - node-pool.yaml
   - instance.yaml
+
 
 # 2. Gemeinsame Metadaten für alle Ressourcen
 namespace: kafka
