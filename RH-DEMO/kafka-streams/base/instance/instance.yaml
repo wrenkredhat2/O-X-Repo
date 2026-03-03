@@ -1,57 +1,14 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: Kafka
 metadata:
-  name: orlen-kafka-cluster
-  namespace: kafka-project
+  name: my-cluster
+  namespace: amq-streams-kafka
 spec:
   kafka:
-    version: 3.6.0 # Adjust to your desired Kafka version
-    replicas: 3
+    # ...
     listeners:
-      - name: plain
-        port: 9092
-        type: internal
-        tls: false
-      - name: external
+      # ...
+      - name: listener1
         port: 9094
         type: route
         tls: true
-        configuration:
-          # This tells OpenShift to use your specific SAN certificate
-#          brokerCertChainAndKey:
-#            secretName: my-custom-kafka-cert
-#            certificate: tls.crt
-#            key: tls.key
-          # Mapping the 3 specific routes to the 3 brokers
-#          bootstrap:
-#            host: bootstrap.example.com
-#          brokers:
-#            - broker: 0
-#              host: route-1.example.com
-#            - broker: 1
-#              host: route-2.example.com
-#            - broker: 2
-#              host: route-3.example.com
-    config:
-      offsets.topic.replication.factor: 3
-      transaction.state.log.replication.factor: 3
-      transaction.state.log.min.isr: 2
-      default.replication.factor: 3
-      min.insync.replicas: 2
-      inter.broker.protocol.version: "3.6"
-    storage:
-      type: jbod
-      volumes:
-      - id: 0
-        type: persistent-claim
-        size: 100Gi
-        deleteClaim: false
-  zookeeper:
-    replicas: 3
-    storage:
-      type: persistent-claim
-      size: 10Gi
-      deleteClaim: false
-  entityOperator:
-    topicOperator: {}
-    userOperator: {}
