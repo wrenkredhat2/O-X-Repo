@@ -8,7 +8,7 @@ metadata:
 spec:
   replicas: 3
   roles:
-    - broker
+    - contoller
   storage:
     type: jbod
     volumes:
