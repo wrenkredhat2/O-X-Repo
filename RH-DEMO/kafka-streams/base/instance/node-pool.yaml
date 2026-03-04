@@ -1,10 +1,10 @@
 apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaNodePool
 metadata:
-  name: orlen-cluster-pool
+  name: orl-clust-pl
   namespace: kafka-streams
   labels:
-    strimzi.io/cluster: orlen-cluster # Must match the name of your Kafka CR
+    strimzi.io/cluster: orl-clust-pl # Must match the name of your Kafka CR
 spec:
   replicas: 3
   roles:
