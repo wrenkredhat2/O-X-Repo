@@ -5,6 +5,7 @@ kind: Kustomization
 resources:
   - node-pool.yaml
   - instance.yaml
+  - nbp-data-topic.yaml
 
 
 # 2. Gemeinsame Metadaten für alle Ressourcen
