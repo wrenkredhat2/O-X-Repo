@@ -4,6 +4,7 @@ kind: Kustomization
 namespace: kafka-streams
 
 resources:
+  - rolebinding.yaml
   - ../../../kafka-streams/base
 
 #namePrefix: prod-
