@@ -17,7 +17,7 @@ spec:
       name: keycloak-db-secret
       key: password
   hostname:
-    hostname: test.keycloak.org
+    hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
   additionalOptions:
     - name: http-relative-path
       value: /auth
