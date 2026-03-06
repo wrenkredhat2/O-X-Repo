@@ -7,18 +7,13 @@ resources:
   - rolebinding.yaml
   - ../../../kafka-streams/base
 
-#namePrefix: prod-
-#commonLabels:
-#  env: production
+patches:
 
-# Mehr Power für Prod
-#patches:
-
-#  - target:
-#      kind: APIManager
-#      name: orlen-apimanager
-#    patch: |-
-#      - op: delete
-#        path: /spec/kafka/listeners/
-#       value: apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+  - target:
+      kind: Kafka
+      name: orl-clust
+    patch: |-
+      - op: replace
+        path: /spec/kafka/listeners/0/configuration/bootstrap/host
+        value: "orl-clust-kafka-listener1-bootstrap-kafka-streams.apps.cluster-492gk.492gk.sandbox2076.opentlc.com"
 

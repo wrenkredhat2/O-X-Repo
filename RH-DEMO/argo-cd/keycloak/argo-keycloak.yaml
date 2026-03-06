@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: keycloak
+  namespace: openshift-gitops # Standardmäßig wird die App im argocd-Namespace verwaltet
+spec:
+  project: default
+  
+  # 1. Quelle: Wo liegt dein Code?
+  source:
+    repoURL: 'https://github.com/wrenkredhat2/O-X-Repo.git'
+    targetRevision: HEAD
+    path: RH-DEMO/overlays/rh-cluster/kafka-streams # Hier zeigen wir direkt auf das Overlay-Verzeichnis
+  
+  # 2. Ziel: Wo soll es installiert werden?
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: keycloak # Kustomize kann diesen überschreiben, falls im Overlay definiert
+
+  # 3. Synchronisations-Einstellungen
+  syncPolicy:
+    automated:
+      prune: true      # Löscht Ressourcen im Cluster, die nicht mehr im Git sind
+      selfHeal: true   # Korrigiert manuelle Änderungen am Cluster automatisch zurück

@@ -12,6 +12,9 @@ spec:
         port: 9094
         type: route
         tls: true
+        configuration:
+          bootstrap:
+            host: orl-clust-kafka-listener1-bootstrap-kafka-streams.apps.dev.orlen.pl
   entityOperator:
     topicOperator: {}
     userOperator: {}
