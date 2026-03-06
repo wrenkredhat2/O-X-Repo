@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: openshift-gitops
 
 resources:
-  - ../../argo-cd/keycloak
+  - ../../../../argo-cd/keycloak
 
 patches:
 
@@ -19,6 +19,6 @@ patches:
         path: /spec/source/path
         value: "RH-DEMO/overlays/rh-cluster/kafka-streams"
       - op: replace
-        path: /spec/desdination/server
+        path: /spec/destination/server
         value: "RH-DEMO/overlays/rh-cluster/kafka-streams"
 

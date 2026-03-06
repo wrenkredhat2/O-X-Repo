@@ -3,7 +3,7 @@ kind: Kustomization
 
 # 1. Ressourcen, die verwaltet werden sollen
 resources:
-  - argo-kycloak.yaml
+  - argo-keycloak.yaml
 
 # 2. Gemeinsame Metadaten für alle Ressourcen
 namespace: openshift-gitops
