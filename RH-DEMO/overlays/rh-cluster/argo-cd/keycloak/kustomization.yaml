@@ -17,8 +17,7 @@ patches:
         value: "https://github.com/wrenkredhat2/O-X-Repo.git"
       - op: replace
         path: /spec/source/path
-        value: "RH-DEMO/overlays/rh-cluster/kafka-streams"
+        value: "RH-DEMO/overlays/rh-cluster/keycloak"
       - op: replace
         path: /spec/destination/server
-        value: "RH-DEMO/overlays/rh-cluster/kafka-streams"
-
+        value: "https://kubernetes.default.svc"

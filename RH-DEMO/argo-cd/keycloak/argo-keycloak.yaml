@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: 'https://github.com/wrenkredhat2/O-X-Repo.git'
     targetRevision: HEAD
-    path: RH-DEMO/overlays/rh-cluster/kafka-streams # Hier zeigen wir direkt auf das Overlay-Verzeichnis
+    path: RH-DEMO/overlays/rh-cluster/keycloak # Hier zeigen wir direkt auf das Overlay-Verzeichnis
   
   # 2. Ziel: Wo soll es installiert werden?
   destination:
