@@ -38,8 +38,12 @@ spec:
   http:
     httpEnabled: true
 
+
+
   hostname:
-    hostnameStrict: false
+    hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+
+#    hostnameStrict: false
 
   proxy:
     headers: xforwarded
