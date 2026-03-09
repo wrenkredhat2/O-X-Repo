@@ -1,7 +1,7 @@
 apiVersion: k8s.keycloak.org/v2alpha1
 kind: Keycloak
 metadata:
-  name: example-kc
+  name: orlen-int-kc
   namespace: keycloak
   annotations:
     argocd.argoproj.io/sync-wave: "11"
@@ -16,6 +16,9 @@ spec:
     passwordSecret:
       name: keycloak-db-secret
       key: password
+    urlSecret: 
+      name: keycloak-db-secret
+      key: db_url
   hostname:
     hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
   additionalOptions:
