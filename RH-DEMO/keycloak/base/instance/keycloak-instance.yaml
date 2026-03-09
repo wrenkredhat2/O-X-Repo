@@ -6,25 +6,55 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: "11"
 spec:
+#  instances: 1
+#  db:
+#    vendor: postgres
+#    host: postgres-db
+#    usernameSecret:
+#      name: keycloak-db-secret
+#      key: username
+#    passwordSecret:
+#      name: keycloak-db-secret
+#      key: password
+#    urlSecret: 
+#      name: keycloak-db-secret
+#      key: db_url
+
+
   instances: 1
+
   db:
     vendor: postgres
-    host: postgres-db
+    host: postgres.keycloak.svc.cluster.local
+    port: 5432
+    database: keycloak
     usernameSecret:
       name: keycloak-db-secret
       key: username
     passwordSecret:
       name: keycloak-db-secret
       key: password
-    urlSecret: 
-      name: keycloak-db-secret
-      key: db_url
+
+  http:
+    httpEnabled: true
+
   hostname:
-    hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
-  additionalOptions:
-    - name: http-relative-path
-      value: /auth
-    - name: http-enabled
-      value: "true"
+    hostnameStrict: false
+
+  proxy:
+    headers: xforwarded
+
   ingress:
-    enabled: true
+    enabled: false
+
+
+
+#  hostname:
+#    hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+#  additionalOptions:
+#    - name: http-relative-path
+##      value: /auth
+#    - name: http-enabled
+#      value: "true"
+#  ingress:
+#    enabled: true
