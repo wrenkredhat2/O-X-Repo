@@ -10,8 +10,8 @@ metadata:
 type: Opaque
 
 stringData:
-  POSTGRESQL_DATABASE: keykloak-db
-  POSTGRESQL_USER: keykloak
+  POSTGRESQL_DATABASE: keycloak-db
+  POSTGRESQL_USER: keycloak
   POSTGRESQL_PASSWORD: supersecret
   POSTGRESQL_ADMIN_PASSWORD: adminpass
 

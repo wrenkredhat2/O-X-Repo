@@ -27,7 +27,7 @@ spec:
     vendor: postgres
     host: postgres.keycloak.svc.cluster.local
     port: 5432
-    database: keycloak
+    database: keycloak-db
     usernameSecret:
       name: keycloak-db-secret
       key: username
@@ -38,8 +38,6 @@ spec:
   http:
     httpEnabled: true
 
-
-
   hostname:
     hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
 
@@ -49,7 +47,7 @@ spec:
     headers: xforwarded
 
   ingress:
-    enabled: false
+    enabled: true
 
 
 
