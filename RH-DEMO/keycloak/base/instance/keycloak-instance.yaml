@@ -25,7 +25,8 @@ spec:
 
   db:
     vendor: postgres
-    host: postgres.keycloak.svc.cluster.local
+    host: postgres
+    database: keycloak-db
     port: 5432
     usernameSecret:
       name: keycloak-db-secret
