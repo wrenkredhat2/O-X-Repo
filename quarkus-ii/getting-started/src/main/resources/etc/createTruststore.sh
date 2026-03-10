@@ -17,7 +17,7 @@ echo "--- Creating JKS Truststore ---"
 rm -f "$TS_FILE"
 
 # 3. Import the certificate into a new JKS truststore
-echo keytool -importcert \
+keytool -importcert \
   -alias strimzi-cluster-ca \
   -file ca.crt \
   -keystore "$TS_FILE" \

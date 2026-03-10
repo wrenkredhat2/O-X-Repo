@@ -15,6 +15,11 @@ spec:
         configuration:
           bootstrap:
             host: orl-clust-kafka-listener1-bootstrap-kafka-streams.apps.dev.orlen.pl
+      # --- NEW IINTERNAL LISTENER ---
+      - name: internal
+        port: 9092
+        type: internal
+        tls: false
   entityOperator:
     topicOperator: {}
     userOperator: {}

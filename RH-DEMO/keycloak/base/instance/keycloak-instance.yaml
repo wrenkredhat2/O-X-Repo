@@ -23,6 +23,10 @@ spec:
 
   instances: 1
 
+  # Todo
+  # define Admin password
+  # Try out default password
+
   db:
     vendor: postgres
     host: postgres
@@ -39,7 +43,7 @@ spec:
     httpEnabled: true
 
   hostname:
-    hostname: keycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+    hostname: xkeycloak.apps.cluster-492gk.492gk.sandbox2076.opentlc.comx
 
 #    hostnameStrict: false
 
