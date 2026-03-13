@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  labels:
+    app: quarkus-hello
+  name: quarkus-build-pipeline
+  namespace: camel-routes
+spec:
+  params:
+    - name: git-repository-url
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.git-repository-url)
+      taskRef:
+        kind: Task
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: workspace
+  workspaces:
+    - name: workspace
