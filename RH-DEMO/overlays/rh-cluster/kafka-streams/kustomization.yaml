@@ -17,3 +17,10 @@ patches:
         path: /spec/kafka/listeners/0/configuration/bootstrap/host
         value: "orl-clust-kafka-listener1-bootstrap-kafka-streams.apps.cluster-492gk.492gk.sandbox2076.opentlc.com"
 
+  - target:
+      kind: Console
+      name: orl-clust-console
+    patch: |-
+      - op: replace
+        path: /spec/hostname
+        value: kafka-console.apps.cluster-492gk.492gk.sandbox2076.opentlc.com

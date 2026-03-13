@@ -1,0 +1,35 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: quarkus-template
+spec:
+  resourcetemplates:
+    - apiVersion: tekton.dev/v1beta1
+      kind: PipelineRun
+      metadata:
+        generateName: quarkus-run-
+      spec:
+        pipelineRef:
+          name: quarkus-build-pipeline
+        workspaces:
+          # Workspace for the source code (Fresh for every build)
+          - name: shared-data
+            volumeClaimTemplate:
+              spec:
+                accessModes: [ReadWriteOnce]
+                resources:
+                  requests: { storage: 1Gi }
+          
+          # Workspace for the Maven local repo (Permanent cache)
+          - name: m2-cache
+            persistentVolumeClaim:
+              claimName: maven-m2-pvc
+          
+          # Updated: Mapping to your ConfigMap
+          - name: maven-settings
+            configMap:
+              name: custom-maven-settings
+              # Optional: if your ConfigMap key isn't named 'settings.xml'
+              # items:
+              #  - key: "my-special-config"
+              #    path: "settings.xml"

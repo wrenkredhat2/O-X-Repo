@@ -1,0 +1,10 @@
+kind: Console
+metadata:
+  name: orl-clust-console
+  namespace: kafka-streams
+spec:
+  hostname: kafka-console.apps.cluster-492gk.492gk.sandbox2076.opentlc.com
+  kafkaClusters:
+    - listener: internal
+      name: orl-clust
+      namespace: kafka-streams

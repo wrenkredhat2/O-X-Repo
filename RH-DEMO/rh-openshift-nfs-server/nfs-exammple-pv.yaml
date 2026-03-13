@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: 3scale-data
+spec:
+  capacity:
+    storage: 1Gi
+  nfs:
+    server: 172.30.167.26
+    path: /exports
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: managed-nfs-storage
+  volumeMode: Filesystem

@@ -1,0 +1,55 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: quarkus-build-pipeline
+spec:
+  params:
+    - name: repo-url
+    - name: image-name
+  workspaces:
+    - name: shared-data
+    - name: maven-settings
+    - name: m2-cache  # Highly recommended for Java/Quarkus
+  tasks:
+    - name: fetch-source
+      taskRef:
+        name: git-clone
+      workspaces:
+        - name: output
+          workspace: shared-data
+      params:
+        - name: url
+          value: $(params.repo-url)
+
+    # NEW: Compile the Quarkus App
+    - name: maven-build
+      runAfter: ["fetch-source"]
+      taskRef:
+        name: maven
+      workspaces:
+        - name: source
+          workspace: shared-data
+        - name: maven-settings
+          workspace: maven-settings
+      params:
+        - name: GOALS
+          - "package"
+          - "-Dquarkus.package.type=fast-jar" # Standard for JVM mode
+          - "-DskipTests" # Optional, but common for CI speed
+
+    # Build the Container Image
+    - name: build-and-push
+      runAfter: ["maven-build"]
+      taskRef:
+        name: kaniko
+      workspaces:
+        - name: source
+          workspace: shared-data
+      params:
+        - name: IMAGE
+          value: $(params.image-name)
+        # Quarkus standard Dockerfile is usually here:
+        - name: DOCKERFILE
+          value: "src/main/docker/Dockerfile.jvm"
+        - name: CONTEXT
+          value: "."
