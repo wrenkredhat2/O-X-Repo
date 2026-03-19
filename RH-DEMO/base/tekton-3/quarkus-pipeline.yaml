@@ -1,0 +1,105 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: quarkus-build-pipeline-ui-impr-ii
+spec:
+  params:
+    - default: 'https://github.com/wrenkredhat2/O-X-Repo.git'
+      name: git-repository-url
+      type: string
+    - default: 'false'
+      name: sslVerify
+      type: string
+    - default: camel-quarkus
+      name: context-dir
+      type: string
+    - name: image
+      type: string
+      default: "quay.io/wrenk/camel-quarkus-nbp"
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.git-repository-url)
+      taskRef:
+        kind: Task
+        name: clone-task-impr
+      workspaces:
+        - name: source
+          workspace: source
+    - name: debug-clone
+      params:
+        - name: context-dir
+          value: $(params.context-dir)
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: debug-clone-task
+      workspaces:
+        - name: source
+          workspace: source
+    - name: maven-build
+      params:
+        - name: GOALS
+          value:
+            - '-s'
+            - /opt/maven-config/settings.xml
+            - clean
+            - install
+            - '-DskipTests'
+        - name: CONTEXT_DIR
+          value: $(params.context-dir)
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: maven-full-auto-impr
+      workspaces:
+        - name: source
+          workspace: source
+    - name: maven-extract-project-version
+      params:
+        - name: context-dir
+          value: $(params.context-dir)
+      taskRef:
+        name: maven-extract-project-version
+        kind: Task
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - git-clone
+    - name: buildah-bud-and-push
+      taskRef:
+        name: buildah
+        kind: Task
+      params:
+        - name: CONTEXT
+          value: $(params.context-dir)
+        - name: DOCKERFILE
+          value: 'src/main/docker/Dockerfile.jvm'
+        - name: IMAGE
+          value: $(params.image):$(tasks.maven-extract-project-version.results.version)
+#         value: 'quay.io/wrenk/ansible-install:latesto:$(tasks.maven-extract-project-version.results.version)'
+#                 quay.io/wrenk/camel-quarkus-nbp:1.0.0-SNAPSHOT': invalid reference format
+        - name: STORAGE_DRIVER
+          value: vfs
+      workspaces:
+        - name: source
+          workspace: source
+      specs:
+        stepSpecs:
+          - name: build
+            securityContext:
+              privileged: false
+              capabilities:
+                add: ["SETFCAP"]
+      runAfter:
+        - maven-extract-project-version
+        - maven-build
+
+  workspaces:
+    - description: Workspace for source code
+      name: source
+  

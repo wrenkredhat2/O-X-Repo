@@ -1,0 +1,59 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  creationTimestamp: '2026-03-18T12:24:47Z'
+  generation: 4
+  managedFields:
+    - apiVersion: tekton.dev/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:params': {}
+          'f:steps': {}
+          'f:volumes': {}
+          'f:workspaces': {}
+      manager: Mozilla
+      operation: Update
+      time: '2026-03-19T09:54:42Z'
+  name: maven-full-auto-impr
+  namespace: camel-routes
+  resourceVersion: '5034471'
+  uid: a9cc9360-e4e8-4f51-ba2d-ce4e74e3c8c1
+spec:
+  params:
+    - default:
+        - clean
+        - install
+        - '-DskipTests'
+      name: GOALS
+      type: array
+    - default: .
+      name: CONTEXT_DIR
+      type: string
+  steps:
+    - args:
+        - '$(params.GOALS[*])'
+      computeResources: {}
+      image: 'registry.redhat.io/ubi9/openjdk-21:latest'
+      name: mvn-goals
+      script: |
+        mvn -s /opt/maven-config/settings.xml "$@"
+      securityContext:
+        privileged: false
+        runAsUser: 0
+      volumeMounts:
+        - mountPath: /root/.m2
+          name: m2-cache-vol
+        - mountPath: /opt/maven-config
+          name: settings-vol
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+  volumes:
+    - name: m2-cache-vol
+      persistentVolumeClaim:
+        claimName: maven-m2-pvc
+    - configMap:
+        name: quarkus-maven-settings
+      name: settings-vol
+  workspaces:
+    - name: source

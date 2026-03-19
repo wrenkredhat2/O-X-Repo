@@ -21,7 +21,7 @@ spec:
         - name: url
           value: $(params.repo-url)
 
-    # NEW: Compile the Quarkus App
+    # NEW: Compile the Quarkus App  = Jar + Deployment.yaml, .....
     - name: maven-build
       runAfter: ["fetch-source"]
       taskRef:
@@ -33,11 +33,11 @@ spec:
           workspace: maven-settings
       params:
         - name: GOALS
-          - "package"
-          - "-Dquarkus.package.type=fast-jar" # Standard for JVM mode
-          - "-DskipTests" # Optional, but common for CI speed
+        - "package"
+        - "-Dquarkus.package.type=fast-jar" # Standard for JVM mode
+        - "-DskipTests" # Optional, but common for CI speed
 
-    # Build the Container Image
+    # Build the Container Image   -> To Registry
     - name: build-and-push
       runAfter: ["maven-build"]
       taskRef:
@@ -53,3 +53,5 @@ spec:
           value: "src/main/docker/Dockerfile.jvm"
         - name: CONTEXT
           value: "."
+
+ # put Manifests into Argocd. ( + trigger synch )  -> Manifests To kustomize-Repo 

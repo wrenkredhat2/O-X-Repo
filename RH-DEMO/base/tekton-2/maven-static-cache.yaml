@@ -1,0 +1,54 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  creationTimestamp: '2026-03-17T19:45:53Z'
+  generation: 6
+  managedFields:
+    - apiVersion: tekton.dev/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:spec':
+          .: {}
+          'f:params': {}
+          'f:steps': {}
+          'f:volumes': {}
+          'f:workspaces': {}
+      manager: Mozilla
+      operation: Update
+      time: '2026-03-18T09:20:38Z'
+  name: maven-static-cache
+  namespace: camel-routes
+  resourceVersion: '4647685'
+  uid: a5e60409-4ebc-4c9d-bf77-77008dd2112a
+spec:
+  params:
+    - default:
+        - install
+        - '-DskipTests'
+      name: GOALS
+      type: array
+  steps:
+    - args:
+        - '$(params.GOALS[*])'
+      computeResources: {}
+      image: 'registry.redhat.io/ubi9/openjdk-21:latest'
+      name: mvn-build
+      script: |
+        #!/usr/bin/env bash
+        M2_CACHE=/root/.m2-run/$(context.pipelineRun.name)
+        mkdir -p "$M2_CACHE"
+        mvn -s /opt/maven-config/settings.xml \
+            -Dmaven.repo.local="$M2_CACHE" "$@"
+      volumeMounts:
+        - mountPath: /root/.m2-run
+          name: m2-cache
+      workingDir: $(workspaces.source.path)
+  volumes:
+    - name: m2-cache
+      persistentVolumeClaim:
+        claimName: maven-m2-pvc
+    - name: settings-vol
+      mountPath: /opt/maven-config
+  workspaces:
+    - name: source
+    - name: maven-settings

@@ -13,7 +13,7 @@ public class KafkaToOCIPI extends RouteBuilder {
                   "&sslTruststoreLocation={{kafka.ssl.truststore.location}}" +
                   "&sslTruststorePassword={{kafka.ssl.truststore.password}}")
 
-                              .routeId("ocipiroute")
+        .routeId("ocipiroute")
 
        .log("Received message from Kafka: ${body}");
 

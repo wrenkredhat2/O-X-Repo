@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: maven-extract-project-version
+spec:
+  params:
+    - default: pom.xml
+      description: The path to the pom.xml file
+      name: pom-path
+      type: string
+    - description: ContextDir
+      name: context-dir
+      type: string
+  results:
+    - description: The version read from the pom.xml file
+      name: version
+      type: string
+  steps:
+    - computeResources: {}
+      image: 'registry.access.redhat.com/ubi9/ubi-minimal:9.4'
+      name: read-version
+      script: |
+        cd $(workspaces.source.path)/$(params.context-dir)
+        # Extract the version using grep and sed
+        VERSION=$(grep -m1 -oP '(?<=<version>)[^<]+' $(params.pom-path))
+        echo "Project version: $VERSION"
+        # Write the version to the results file
+        echo -n "$VERSION" > $(results.version.path)
+  workspaces:
+    - description: Workspace containing the pom.xml file
+      name: source

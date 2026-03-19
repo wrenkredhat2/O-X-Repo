@@ -1,24 +1,74 @@
 apiVersion: tekton.dev/v1
 kind: Pipeline
 metadata:
-  labels:
-    app: quarkus-hello
   name: quarkus-build-pipeline
-  namespace: camel-routes
 spec:
   params:
-    - name: git-repository-url
+    - default: 'https://github.com/wrenkredhat2/O-X-Repo.git'
+      name: git-repository-url
       type: string
+    - default: 'false'
+      name: sslVerify
+      type: string
+  workspaces:
+    - name: workspace
+    - name: maven-settings
+    - name: maven-local-repo
   tasks:
     - name: git-clone
+      taskRef:
+        kind: Task
+        name: clone-task
       params:
         - name: url
           value: $(params.git-repository-url)
-      taskRef:
-        kind: Task
-        name: git-clone
+        - name: sslVerify
+          value: $(params.sslVerify)
       workspaces:
         - name: output
           workspace: workspace
-  workspaces:
-    - name: workspace
+
+#    - name: maven-build
+#      runAfter:
+#        - git-clone
+#      taskRef:
+#        kind: Task
+#        name: maven
+#      params:
+#        - name: GOALS
+#          value:
+#            - -s
+#            - $(workspaces.maven-settings.path)/settings.xml
+#            - install
+#            - -DskipTests
+#            - -Dmaven.repo.local=$(workspaces.maven-local-repo.path)
+#        - name: CONTEXT_DIR
+#          value: camel-quarkus
+#      workspaces:
+#       - name: source
+#          workspace: workspace
+#        - name: maven-settings
+#          workspace: maven-settings
+#        - name: maven-local-repo
+#          workspace: maven-local-repo
+
+    - name: maven-build
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: maven-static-cache # Using the new custom task
+      params:
+        - name: GOALS
+          value:
+            - -s
+            - $(workspaces.maven-settings.path)/settings.xml
+            - install
+            - -DskipTests
+        - name: CONTEXT_DIR
+          value: camel-quarkus
+      workspaces:
+        - name: source
+          workspace: workspace
+        - name: maven-settings
+          workspace: maven-settings

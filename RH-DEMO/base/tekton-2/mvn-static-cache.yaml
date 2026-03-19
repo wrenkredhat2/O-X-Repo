@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: maven-static-cache
+spec:
+  description: Maven task with a hardcoded static PVC for the .m2 cache to bypass workspace conflicts.
+  params:
+    - default:
+        - install
+        - '-DskipTests'
+      name: GOALS
+      type: array
+    - default: .
+      name: CONTEXT_DIR
+      type: string
+  steps:
+    - args:
+        - '$(params.GOALS[*])'
+      computeResources: {}
+      image: 'registry.redhat.io/ubi9/openjdk-21:latest'
+      name: mvn-goals
+      script: |
+        #!/usr/bin/env bash
+        # We don't need -Dmaven.repo.local because we are mounting directly to /root/.m2
+        mvn -s $(workspaces.maven-settings.path)/settings.xml "$@"
+      volumeMounts:
+        - mountPath: /root/.m2
+          name: m2-cache-vol
+      workingDir: $(workspaces.source.path)/$(params.CONTEXT_DIR)
+  volumes:
+    - name: m2-cache-vol
+      persistentVolumeClaim:
+        claimName: maven-m2-pvc
+  workspaces:
+    - name: source
+    - name: maven-settings

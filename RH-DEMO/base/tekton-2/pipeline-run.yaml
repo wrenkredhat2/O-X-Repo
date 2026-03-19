@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  generateName: quarkus-run-
+  namespace: camel-routes
+spec:
+  pipelineRef:
+    name: quarkus-build-pipeline-ii
+
+  workspaces:
+
+    - name: workspace
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+
+    - name: maven-settings
+      configMap:
+        name: quarkus-maven-settings
+
+    - name: maven-local-repo
+      emptyDir: {}
+      persistentVolumeClaim:
+        claimName: maven-m2-pvc

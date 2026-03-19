@@ -1,0 +1,75 @@
+apiVersion: tekton.dev/v1
+kind: Pipeline
+metadata:
+  name: quarkus-build-pipeline-ui-impr-ii
+spec:
+  params:
+    - default: 'https://github.com/wrenkredhat2/O-X-Repo.git'
+      name: git-repository-url
+      type: string
+    - default: 'false'
+      name: sslVerify
+      type: string
+    - default: camel-quarkus
+      name: context-dir
+      type: string
+  tasks:
+    - name: git-clone
+      params:
+        - name: url
+          value: $(params.git-repository-url)
+      taskRef:
+        kind: Task
+        name: clone-task-impr
+      workspaces:
+        - name: source
+          workspace: source
+    - name: debug-clone
+      params:
+        - name: context-dir
+          value: $(params.context-dir)
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: debug-clone-task
+      workspaces:
+        - name: source
+          workspace: source
+    - name: maven-build
+      params:
+        - name: GOALS
+          value:
+            - '-s'
+            - /opt/maven-config/settings.xml
+            - clean
+            - install
+            - '-DskipTests'
+        - name: CONTEXT_DIR
+          value: $(params.context-dir)
+      runAfter:
+        - git-clone
+      taskRef:
+        kind: Task
+        name: maven-full-auto-impr
+      workspaces:
+        - name: source
+          workspace: source
+    - name: maven-extract-project-version
+      params:
+        - name: context-dir
+          value: $(params.context-dir)
+      taskRef:
+        name: maven-extract-project-version
+        kind: task
+      workspaces:
+        - name: source
+          workspace: source
+      runAfter:
+        - git-clone
+
+
+  workspaces:
+    - description: Workspace for source code
+      name: source
+  

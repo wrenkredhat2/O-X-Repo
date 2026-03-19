@@ -1,0 +1,23 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: debug-clone-task
+spec:
+  params:
+    - default: .
+      description: Subdirectory to inspect inside the workspace
+      name: context-dir
+      type: string
+  steps:
+    - computeResources: {}
+      image: 'registry.redhat.io/ubi9/ubi-minimal:9.3'
+      name: debug
+      script: |
+        set -x
+        echo "Listing workspace root..."
+        ls -la $(workspaces.source.path)
+        echo "Listing context directory: $(params.context-dir)"
+        ls -la $(workspaces.source.path)/$(params.context-dir)
+  workspaces:
+    - description: Workspace containing the cloned repository
+      name: source

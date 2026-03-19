@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1
+kind: Task
+metadata:
+  name: clone-task
+spec:
+  steps:
+    - computeResources: {}
+      image: 'ghcr.io/tektoncd/github.com/tektoncd/pipeline/cmd/git-init:v0.40.2'
+      name: clone
+      script: |
+        set -x
+        export GIT_SSL_NO_VERIFY=true
+        git config --global http.sslVerify false
+        # ORL: git -c http.extraheader="AUTHORIZATION: Basic a2FjcHJ6eWNraXA6cWh5M2FuNzdpZmgzd3ltc21yemkzdG5jc3M1MnZ6Z3diNHhibGdwem5idnZ4N3F5aDQ3cQ==" clone --depth 1 --recurse-submodules --branch main https://devops-sir.orlen.pl/IRP_INT_REDHATAF/CAMEL_Repository/_git/CAMEL_Repository /workspace/outp…
+        git  clone --depth 1 --recurse-submodules --branch main  /workspace/outp…
+  workspaces:
+    - name: output
+ 
+ 
